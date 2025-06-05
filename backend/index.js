@@ -18,20 +18,37 @@ const pool = new Pool({
     port:5432,
 })
 
+const storage = multer.diskStorage({
+    destination: "uploads/",
+    filename:(req,file,cb)=>{
+        const uniqueName = Date.now() + "-" + file.originalname
+        cb(null, uniqueName)
+    }
+})
 
-app.post('/InserirLivros', async (req, res)=>{
-    const { isbn } = req.body
+const upload = multer({ storage })
+
+app.post('/InserirLivros', upload.single("imagem"), async (req, res)=>{
+
    try{
+
+    const { isbn } = req.body
+    const imagemUp = req.file ? "uploads/" + req.file.filename : null
+
     const result = await  pool.query(`
-        INSERT INTO livros (isbn)
-        VALUES ($1);
-        `,[isbn])
+        INSERT INTO livros (isbn, caminho_capa)
+        VALUES ($1, $2);
+        `,[isbn, imagemUp])
+
           res.status(201).send("Livro inserido com sucesso.");
    }catch(err){
         console.error("Erro ao inserir livro:", err);
     res.status(500).send("Erro ao inserir livro.");
+    
    }
 })
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
 app.listen(PORT,()=>{console.log("Funcionando");
 })
