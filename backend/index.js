@@ -32,13 +32,13 @@ app.post('/InserirLivros', upload.single("imagem"), async (req, res)=>{
 
    try{
 
-    const { isbn } = req.body
+    const { isbn, titulo, autor } = req.body
     const imagemUp = req.file ? "uploads/" + req.file.filename : null
 
     const result = await  pool.query(`
-        INSERT INTO livros (isbn, caminho_capa)
-        VALUES ($1, $2);
-        `,[isbn, imagemUp])
+        INSERT INTO livros (isbn, caminho_capa, titulo_livro, autor_livro)
+        VALUES ($1, $2, $3, $4);
+        `,[isbn, imagemUp, titulo, autor])
 
           res.status(201).send("Livro inserido com sucesso.");
    }catch(err){
@@ -49,6 +49,18 @@ app.post('/InserirLivros', upload.single("imagem"), async (req, res)=>{
 })
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
+
+app.get("/livrosDoBanco", async (req, res)=>{
+
+    try{
+        const result = await pool.query(`
+            SELECT * FROM livros 
+            `)
+            res.json(result.rows)
+    }catch(err){
+        alert(err)
+    }
+})
 
 app.listen(PORT,()=>{console.log("Funcionando");
 })

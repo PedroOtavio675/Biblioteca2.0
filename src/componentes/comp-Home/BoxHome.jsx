@@ -1,10 +1,11 @@
+import { Children } from "react"
+import BoxBook from "./boxBook"
 
-
-const BoxHome = ()=>{
+const BoxHome = (props)=>{
 
     return(
-        <div className="bg-slate-200 overflow-x-hidden-hidden h-[100vh]">
-           
+        <div className="bg-slate-400 w-[100vw] rounded-md flex justify-center items-center">
+           <BoxBook livros={props.livros}></BoxBook>
         </div>
     )
 }
