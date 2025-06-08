@@ -1,6 +1,7 @@
 
 const express = require('express')
 const app = express()
+const bcrypt = require('bcrypt')
 const multer = require('multer')
 const path = require('path')
 const { Pool } = require("pg")
@@ -35,7 +36,7 @@ app.post('/InserirLivros', upload.single("imagem"), async (req, res)=>{
     const { isbn, titulo, autor } = req.body
     const imagemUp = req.file ? "uploads/" + req.file.filename : null
 
-    const result = await  pool.query(`
+    await  pool.query(`
         INSERT INTO livros (isbn, caminho_capa, titulo_livro, autor_livro)
         VALUES ($1, $2, $3, $4);
         `,[isbn, imagemUp, titulo, autor])
@@ -59,6 +60,23 @@ app.get("/livrosDoBanco", async (req, res)=>{
             res.json(result.rows)
     }catch(err){
         alert(err)
+    }
+})
+
+app.post('/registrarUsuario', async (req, res)=>{
+    const {nome, email, senha} = req.body
+    
+    const senhaHash = await bcrypt.hash(senha, 10)
+
+    try{
+        pool.query(`
+            INSERT INTO usuarios (nome_usuario, email_usuario, senha_hash_usuario)
+            VALUES($1, $2, $3)
+            `,[nome,email,senhaHash])
+            res.status(201).send("Usuario cadastrado")
+    }catch(err){
+        console.error(err)
+         res.status(500).send('Erro ao cadastrar no banco')
     }
 })
 
