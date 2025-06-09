@@ -7,6 +7,8 @@ const path = require('path')
 const { Pool } = require("pg")
 const PORT = 3000
 const cors = require('cors')
+const { Try } = require('@mui/icons-material')
+const { log } = require('console')
 app.use(cors())
 
 app.use(express.json());
@@ -78,6 +80,22 @@ app.post('/registrarUsuario', async (req, res)=>{
         console.error(err)
          res.status(500).send('Erro ao cadastrar no banco')
     }
+})
+
+app.post('/verificarSeUsuarioJaExiste', async (req, res)=>{
+    const {email} = req.body
+
+    try{
+const result = await pool.query(`
+        SELECT 1 FROM usuarios
+        WHERE email_usuario = $1
+        LIMIT 1;
+        `, [email])
+    res.json(result.rows)
+    }catch(err){
+      console.log(err);
+    }
+
 })
 
 app.listen(PORT,()=>{console.log("Funcionando");
