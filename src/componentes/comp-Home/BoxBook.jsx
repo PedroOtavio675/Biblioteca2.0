@@ -5,14 +5,35 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
+import { useState } from 'react';
+import DataLivro from './DataLivro';
+import axios from "axios";
 const BoxBook = (props) => {
+    const [clickNoLivro, setClickNoLivro] = useState(null)
+     const [dadosDOLivro, setDadosDOLivro] = useState({ descricao: "" });
+
+  const googleBooks = async (isbn)=>{
+    try{
+const result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+ const des = result.data.items[0].volumeInfo.description
+ setDadosDOLivro("")
+ setDadosDOLivro({descricao: des})
+ console.log(dadosDOLivro);
+ 
+    }catch(err){
+       console.error(err);
+    }
+  }
   return (
 
-    
-    <div className="flex flex-wrap items-center justify-center">
+      
+    <div  className="flex flex-wrap justify-center flex-row items-start gap-4">
       {props.livros.map((e, index) => (
-<Card key={index} className='m-2' sx={{ maxWidth: 200, maxHeight: 340 }}>
+        <div key={index} onClick={()=>{
+          setClickNoLivro(e)
+          googleBooks(e.isbn)
+        }}>
+<Card   className='m-2' sx={{ maxWidth: 200, maxHeight: 340 }}>
       <CardMedia
         className='h-[250px] w-[150px] p-2'
         component="img"
@@ -32,7 +53,12 @@ const BoxBook = (props) => {
       <CardActions>
       </CardActions>
     </Card>
+    </div>
+   
       ))}
+       {clickNoLivro && (
+      <DataLivro data={dadosDOLivro} book={clickNoLivro} onClose={()=> setClickNoLivro(null)}></DataLivro>
+    )}
     </div>
   );
 };
