@@ -11,14 +11,24 @@ import axios from "axios";
 const BoxBook = (props) => {
     const [clickNoLivro, setClickNoLivro] = useState(null)
      const [dadosDOLivro, setDadosDOLivro] = useState({ descricao: "" });
-
-  const googleBooks = async (isbn)=>{
+let result
+  const googleBooks = async (isbn, titulo)=>{
+    setDadosDOLivro("")
     try{
-const result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+console.log(result.data.totalItems);
+
+
+if(result.data.totalItems == 0){
+  result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=title:${titulo}`)
+   console.log("enrou no if");
+   console.log(result.data.items[0]);
+}
+
+
  const des = result.data.items[0].volumeInfo.description
- setDadosDOLivro("")
  setDadosDOLivro({descricao: des})
- console.log(dadosDOLivro);
+
  
     }catch(err){
        console.error(err);
@@ -31,7 +41,7 @@ const result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=is
       {props.livros.map((e, index) => (
         <div key={index} onClick={()=>{
           setClickNoLivro(e)
-          googleBooks(e.isbn)
+          googleBooks(e.isbn, e.titulo_livro)
         }}>
 <Card   className='m-2' sx={{ maxWidth: 200, maxHeight: 340 }}>
       <CardMedia
@@ -43,7 +53,7 @@ const result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=is
       />
       <CardContent>
         <Typography gutterBottom variant="h6" component="div">
-         
+      
        {e.titulo_livro}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>

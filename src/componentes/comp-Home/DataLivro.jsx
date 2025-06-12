@@ -4,9 +4,9 @@ import Card from "@mui/material/Card";
 
 const DataLivro = ({ book, onClose, data }) => {
   if (!book) return null;
- 
+
   return (
-    <div className="w-[500px] h-[500px] border-1 bg-slate-200 rounded-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ">
+    <div className="w-[500px] h-[500px] border-1 bg-slate-200 rounded-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col">
       <ArrowBackIcon
         className="bg-slate-900 text-white rounded-md m-2"
         onClick={onClose}
@@ -31,6 +31,10 @@ const DataLivro = ({ book, onClose, data }) => {
         <p><strong>Descrição:</strong></p>
         <p className="overflow-y-auto h-[210px]">{data.descricao}</p>
       </div>
+      </div>
+
+      <div className={book.reserva ? "bg-red-800 w-[80px] text-center rounded-md m-3" : "bg-emerald-800 w-[80px] text-center rounded-md text-white m-3"}>
+        {book.reserva ? "Reservado" : "Não reservado"}
       </div>
     </div>
   );
