@@ -3,33 +3,76 @@ import { useState } from "react";
 import axios from "axios";
 
 const BoxDados = () => {
-  const [form, setForm] = useState({ nome: "", email: "", senha: "" });
-  const [checkSenha, setCheckSenha] = useState("")
+  const [form, setForm] = useState({ nome: "", email: "", senha: "", cpf: "" });
+  const [checkSenha, setCheckSenha] = useState("");
+
+  function validarCPF(cpf) {
+    cpf = cpf.replace(/[^\d]+/g, ""); // Remove tudo que não for número
+
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+      return false; // CPF com 11 dígitos iguais ou fora do padrão
+    }
+
+    let soma = 0;
+    let resto;
+
+    // Valida 1º dígito
+    for (let i = 1; i <= 9; i++) {
+      soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(9))) return false;
+
+    // Valida 2º dígito
+    soma = 0;
+    for (let i = 1; i <= 10; i++) {
+      soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(10))) return false;
+
+    return true;
+  }
 
   const sendformUsuarios = async (e) => {
     e.preventDefault();
-    
-   const result = await axios.post("http://localhost:3000/verificarSeUsuarioJaExiste", form)
-      if(result.data.length === 0){
-    if(form.senha == checkSenha){
-      if(form.senha.length >= 8 && /[A-Z]/.test(form.senha) && /\d/.test(form.senha) && /[!@#$%^&*]/.test(form.senha)){
- try {
-      await axios.post("http://localhost:3000/registrarUsuario", form);
-      alert(`Usuário ${form.nome} foi cadastrado`)
-    } catch (err) {
-      alert(err)
-    }
-  }else{
-    alert("Senha inválida!")
-  }
-    }else{
-      alert("As senhas não correspondem")
-    }
 
-  }else{
-    alert("Esse email já está cadastrado em nosso banco!")
-  }
-}
+    const resultCPF = await axios.post(
+      "http://localhost:3000/verificarSeCPFJaExiste",
+      form
+    );
+    const resultEMAIL = await axios.post("http://localhost:3000/verificarSeEmailJaExiste", form)
+
+    if (resultCPF.data.length === 0 && resultEMAIL.data.length === 0) {
+      if(validarCPF(form.cpf) == true){
+      if (form.senha == checkSenha) {
+        if (
+          form.senha.length >= 8 &&
+          /[A-Z]/.test(form.senha) &&
+          /\d/.test(form.senha) &&
+          /[!@#$%^&*]/.test(form.senha)
+        ) {
+          try {
+            await axios.post("http://localhost:3000/registrarUsuario", form);
+            alert(`Usuário ${form.nome} foi cadastrado`);
+          } catch (err) {
+            alert(err);
+          }
+        } else {
+          alert("Senha inválida!");
+        }
+      } else {
+        alert("As senhas não correspondem");
+      }
+    }else{
+      alert("CPF inválido")
+    }
+    } else {
+      alert("Esse CPF ou email já está cadastrado em nosso banco!");
+    }
+  };
 
   return (
     <div className="flex">
@@ -53,10 +96,19 @@ const BoxDados = () => {
             variant="standard"
           ></TextField>
           <TextField
+            type="number"
+            id="standard-basic-cpf"
+            variant="standard"
+            value={form.cpf}
+            onChange={(e) => {
+              setForm({ ...form, cpf: e.target.value });
+            }}
+            label={validarCPF(form.cpf) || null ? "CPF" : "CPF inválido"}
+          ></TextField>
+          <TextField
             value={form.senha}
             onChange={(e) => setForm({ ...form, senha: e.target.value })}
             type="password"
-            
             id="standard-basic-senha"
             label="Senha"
             variant="standard"
@@ -64,18 +116,32 @@ const BoxDados = () => {
           <TextField
             type="password"
             value={checkSenha}
-            onChange={(e)=>setCheckSenha(e.target.value)}
+            onChange={(e) => setCheckSenha(e.target.value)}
             id="standard-basic-senha-confirmar"
-            label={checkSenha == form.senha ? "Confirme sua senha" : "Senhas não combinam"}
+            label={
+              checkSenha == form.senha
+                ? "Confirme sua senha"
+                : "Senhas não combinam"
+            }
             className="placeholder-red-500"
             variant="standard"
           ></TextField>
-          <p className="text-[12px] text-red-600">
-            <p className={form.senha.length  > 8 && "hidden"}>{form.senha.length  < 8 ? "Deve conter pelo menos 8 caracteres" : ""}</p>
-          <p className={/[A-Z]/.test(form.senha) && "hidden"}>{/[A-Z]/.test(form.senha) ? "" : "Letra maiúscula"}</p>
-          <p className={/\d/.test(form.senha) && "hidden"}>{/\d/.test(form.senha) ? "" : "Números"}</p>
-          <p className={/[!@#$%^&*]/.test(form.senha) && "hidden"}>{/[!@#$%^&*]/.test(form.senha) ? "":"Caracteres especiais"}</p>
-          </p>
+          <div className="text-[12px] text-red-600">
+            <p className={form.senha.length > 8 ? "hidden" : ""}>
+              {form.senha.length < 8
+                ? "Deve conter pelo menos 8 caracteres"
+                : ""}
+            </p>
+            <p className={/[A-Z]/.test(form.senha) && "hidden"}>
+              {/[A-Z]/.test(form.senha) ? "" : "Letra maiúscula"}
+            </p>
+            <p className={/\d/.test(form.senha) && "hidden"}>
+              {/\d/.test(form.senha) ? "" : "Números"}
+            </p>
+            <p className={/[!@#$%^&*]/.test(form.senha) && "hidden"}>
+              {/[!@#$%^&*]/.test(form.senha) ? "" : "Caracteres especiais"}
+            </p>
+          </div>
           <button
             type="submit"
             className="w-[80px] h-[35px] bg-slate-950 text-white m-4 rounded-md"

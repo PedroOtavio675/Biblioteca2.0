@@ -66,15 +66,15 @@ app.get("/livrosDoBanco", async (req, res)=>{
 })
 
 app.post('/registrarUsuario', async (req, res)=>{
-    const {nome, email, senha} = req.body
+    const {nome, email, senha, cpf} = req.body
     
     const senhaHash = await bcrypt.hash(senha, 10)
 
     try{
         pool.query(`
-            INSERT INTO usuarios (nome_usuario, email_usuario, senha_hash_usuario)
-            VALUES($1, $2, $3)
-            `,[nome,email,senhaHash])
+            INSERT INTO usuarios (nome_usuario, email_usuario, senha_hash_usuario, cpf_usuario)
+            VALUES($1, $2, $3, $4)
+            `,[nome, email, senhaHash, cpf])
             res.status(201).send("Usuario cadastrado")
     }catch(err){
         console.error(err)
@@ -82,21 +82,37 @@ app.post('/registrarUsuario', async (req, res)=>{
     }
 })
 
-app.post('/verificarSeUsuarioJaExiste', async (req, res)=>{
-    const {email} = req.body
+app.post('/verificarSeCPFJaExiste', async (req, res)=>{
+    const {cpf} = req.body
 
     try{
 const result = await pool.query(`
         SELECT 1 FROM usuarios
-        WHERE email_usuario = $1
+        WHERE cpf_usuario = $1
         LIMIT 1;
-        `, [email])
+        `, [cpf])
     res.json(result.rows)
     }catch(err){
       console.log(err);
     }
 
 })
+app.post("/verificarSeEmailJaExiste", async (req, res)=>{
+    const {email} = req.body
+
+    try{
+ const result = await pool.query(`
+        SELECT 1 FROM usuarios
+        WHERE email_usuario = $1
+        LIMIT 1
+        `,[email])
+
+        res.json(result.rows)
+    }catch(err){
+        console.log(err);
+    }
+   
+} )
 
 app.listen(PORT,()=>{console.log("Funcionando");
 })
