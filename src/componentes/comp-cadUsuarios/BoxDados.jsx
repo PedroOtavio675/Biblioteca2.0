@@ -1,40 +1,13 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+import validarCPF from "../../validarCPF";
 
 const BoxDados = () => {
   const [form, setForm] = useState({ nome: "", email: "", senha: "", cpf: "" });
   const [checkSenha, setCheckSenha] = useState("");
 
-  function validarCPF(cpf) {
-    cpf = cpf.replace(/[^\d]+/g, ""); // Remove tudo que não for número
-
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-      return false; // CPF com 11 dígitos iguais ou fora do padrão
-    }
-
-    let soma = 0;
-    let resto;
-
-    // Valida 1º dígito
-    for (let i = 1; i <= 9; i++) {
-      soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
-    }
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.charAt(9))) return false;
-
-    // Valida 2º dígito
-    soma = 0;
-    for (let i = 1; i <= 10; i++) {
-      soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
-    }
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.charAt(10))) return false;
-
-    return true;
-  }
+ 
 
   const sendformUsuarios = async (e) => {
     e.preventDefault();
@@ -43,32 +16,35 @@ const BoxDados = () => {
       "http://localhost:3000/verificarSeCPFJaExiste",
       form
     );
-    const resultEMAIL = await axios.post("http://localhost:3000/verificarSeEmailJaExiste", form)
+    const resultEMAIL = await axios.post(
+      "http://localhost:3000/verificarSeEmailJaExiste",
+      form
+    );
 
     if (resultCPF.data.length === 0 && resultEMAIL.data.length === 0) {
-      if(validarCPF(form.cpf) == true){
-      if (form.senha == checkSenha) {
-        if (
-          form.senha.length >= 8 &&
-          /[A-Z]/.test(form.senha) &&
-          /\d/.test(form.senha) &&
-          /[!@#$%^&*]/.test(form.senha)
-        ) {
-          try {
-            await axios.post("http://localhost:3000/registrarUsuario", form);
-            alert(`Usuário ${form.nome} foi cadastrado`);
-          } catch (err) {
-            alert(err);
+      if (validarCPF(form.cpf) == true) {
+        if (form.senha == checkSenha) {
+          if (
+            form.senha.length >= 8 &&
+            /[A-Z]/.test(form.senha) &&
+            /\d/.test(form.senha) &&
+            /[!@#$%^&*]/.test(form.senha)
+          ) {
+            try {
+              await axios.post("http://localhost:3000/registrarUsuario", form);
+              alert(`Usuário ${form.nome} foi cadastrado`);
+            } catch (err) {
+              alert(err);
+            }
+          } else {
+            alert("Senha inválida!");
           }
         } else {
-          alert("Senha inválida!");
+          alert("As senhas não correspondem");
         }
       } else {
-        alert("As senhas não correspondem");
+        alert("CPF inválido");
       }
-    }else{
-      alert("CPF inválido")
-    }
     } else {
       alert("Esse CPF ou email já está cadastrado em nosso banco!");
     }

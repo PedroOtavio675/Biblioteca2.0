@@ -1,0 +1,5 @@
+
+CREATE TABLE registro_retiradas_livros(
+id SERIAL PRIMARY KEY,
+isbn_livro_retirada 
+)

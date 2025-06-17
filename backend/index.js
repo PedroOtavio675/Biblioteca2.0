@@ -13,6 +13,9 @@ app.use(cors())
 
 app.use(express.json());
 
+
+
+//dados do banco de dados
 const pool = new Pool({
     user:'postgres',
     host:'localhost',
@@ -20,7 +23,7 @@ const pool = new Pool({
     password:'admin',
     port:5432,
 })
-
+// Configuração do multer para upload de arquivos
 const storage = multer.diskStorage({
     destination: "uploads/",
     filename:(req,file,cb)=>{
@@ -31,6 +34,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
+
+// Rota para inserir livros
 app.post('/InserirLivros', upload.single("imagem"), async (req, res)=>{
 
    try{
@@ -51,8 +56,10 @@ app.post('/InserirLivros', upload.single("imagem"), async (req, res)=>{
    }
 })
 
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
+// Rota para listar livros
 app.get("/livrosDoBanco", async (req, res)=>{
 
     try{
@@ -65,6 +72,7 @@ app.get("/livrosDoBanco", async (req, res)=>{
     }
 })
 
+// Rota para registrar usuários
 app.post('/registrarUsuario', async (req, res)=>{
     const {nome, email, senha, cpf} = req.body
     
@@ -82,6 +90,8 @@ app.post('/registrarUsuario', async (req, res)=>{
     }
 })
 
+
+// Rotas para autenticar usuários
 app.post('/verificarSeCPFJaExiste', async (req, res)=>{
     const {cpf} = req.body
 
@@ -113,6 +123,25 @@ app.post("/verificarSeEmailJaExiste", async (req, res)=>{
     }
    
 } )
+
+
+// Rotas para verificar se o livros ja está retirado/existe e se o usuario ja tem livros ritirados.
+app.post("/verificarLivroExiste", async (req, res)=>{
+    const {isbn} = req.body
+
+    try{
+        const result = await pool.query(`
+            SELECT 1 FROM livros
+            WHERE isbn = $1
+            LIMIT 1
+            `,[isbn])
+            
+            res.status(200).json(result.rows);
+    }catch(err){
+        console.error(err)
+            res.status(404).send("Erro ao encontrar.")
+    }
+});
 
 app.listen(PORT,()=>{console.log("Funcionando");
 })
