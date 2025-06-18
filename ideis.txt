@@ -1,5 +1,8 @@
 
-CREATE TABLE registro_retiradas_livros(
-id SERIAL PRIMARY KEY,
-isbn_livro_retirada 
-)
+Na pagina de fazer uma retirada eu preciso alterar o valor false para true de um campo na tabela de livros, ao mesmo tempo eu preciso criar uma tabela do registro, que se a data de devolução for ultrapaçada 
+
+
+1 - alterar o valor de false para true no campo da tabela de livros do livro;
+2 - criar um registro como valor pendente
+3 - se a data de devolução no registro for ultrapaçada troque o valor por atrasado;
+4 - se enveltualmente na page de devolução ele for devolvido, troque o valor para devolvido

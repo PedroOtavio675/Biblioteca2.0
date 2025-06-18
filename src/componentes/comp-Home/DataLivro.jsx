@@ -33,9 +33,6 @@ const DataLivro = ({ book, onClose, data }) => {
       </div>
       </div>
 
-      <div className={book.reserva ? "bg-red-800 w-[80px] text-center rounded-md m-3" : "bg-emerald-800 w-[80px] text-center rounded-md text-white m-3"}>
-        {book.reserva ? "Reservado" : "Não reservado"}
-      </div>
     </div>
   );
 };

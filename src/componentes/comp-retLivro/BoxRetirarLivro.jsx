@@ -20,7 +20,8 @@ const retidaLivro = async (e)=>{
   if(validarCPF(form.cpf)){
     if(resultCPF.data.length !== 0){
 if(dataValida(form.dataDevolucao)){
- alert("ok")
+  axios.post("http://localhost:3000/fazerRetirada", form)
+  alert("ok")
     }else{
       alert("Data inválida")
     }

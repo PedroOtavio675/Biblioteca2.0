@@ -9,6 +9,7 @@ const PORT = 3000
 const cors = require('cors')
 const { Try } = require('@mui/icons-material')
 const { log } = require('console')
+const { send } = require('vite')
 app.use(cors())
 
 app.use(express.json());
@@ -142,6 +143,28 @@ app.post("/verificarLivroExiste", async (req, res)=>{
             res.status(404).send("Erro ao encontrar.")
     }
 });
+
+
+// Rota para fazer a retirada
+app.post("/fazerRetirada", async (req, res)=>{
+     const {isbn, cpf, dataDevolucao, observacoes} = req.body
+    try{
+         await pool.query(`
+            INSERT INTO retiradas_livros (isbn_livro, cpf_usuario, data_prevista_devolucao, observacoes)
+            VALUES($1, $2, $3, $4);
+            `,[isbn, cpf, dataDevolucao, observacoes])
+
+        await pool.query(`
+            UPDATE livros
+            SET status = 'pendente'
+            WHERE isbn = $1;
+            `,[isbn])
+            res.status(200).send("Livro retirado")
+    }catch(err){
+        console.error(err)
+        res.status(400).send("Nao foi possivel fazer a retirada")
+    }
+})
 
 app.listen(PORT,()=>{console.log("Funcionando");
 })
