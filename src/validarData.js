@@ -9,4 +9,6 @@ function dataValida(dataStr) {
     data.getFullYear() === ano
   );
 }
+
+
 export default dataValida

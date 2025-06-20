@@ -166,5 +166,22 @@ app.post("/fazerRetirada", async (req, res)=>{
     }
 })
 
+
+// Rota para verificar se o livro está pendente
+app.post("/verificarRetiradas", async (req, res)=>{
+     const {id} = req.body
+    try{
+        const result = await pool.query(`
+            SELECT 1 FROM retiradas_livro
+            WHERE id = $1;
+            `,[id])
+
+            res.json(result.rows)
+    }catch(err){
+        console.error(err)
+        res.status(404).send("Não foi possível comunicar com o banco")
+    }
+})
+
 app.listen(PORT,()=>{console.log("Funcionando");
 })

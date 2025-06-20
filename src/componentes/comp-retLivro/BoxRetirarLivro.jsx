@@ -9,6 +9,10 @@ import dataValida from "../../validarData";
 const BoxRetirarLivro = ()=>{
 
   const [form, setForm] = useState({isbn:"", cpf:"", dataDevolucao:"", observacoes:""})
+  function parseDataBR(dataStr) {
+  const [dia, mes, ano] = dataStr.split("/").map(Number);
+  return new Date(ano, mes - 1, dia); // mês começa em 0 (janeiro)
+}
     
 const retidaLivro = async (e)=>{
   e.preventDefault()
@@ -20,8 +24,14 @@ const retidaLivro = async (e)=>{
   if(validarCPF(form.cpf)){
     if(resultCPF.data.length !== 0){
 if(dataValida(form.dataDevolucao)){
-  axios.post("http://localhost:3000/fazerRetirada", form)
+  const dataHoje = new Date()
+  const dataVerificada = parseDataBR(form.dataDevolucao)
+  if(dataVerificada > dataHoje){
+axios.post("http://localhost:3000/fazerRetirada", form)
   alert("ok")
+  }else{
+    alert("A data de devolução deve ser maior que a data atual!")
+  }
     }else{
       alert("Data inválida")
     }
