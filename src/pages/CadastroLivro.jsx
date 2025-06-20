@@ -23,7 +23,8 @@ function CadastroLivro() {
         });
 
         if (resposta.ok) {
-          alert("Livro inserido com sucesso!!");
+         const result = await resposta.json()
+         alert(`${result.mensagem} \n O id do livro é ${result.idCadastrado}`)
           setCampoIsbn("");
           settitulo("")
           setautor("")

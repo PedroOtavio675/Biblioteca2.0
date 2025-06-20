@@ -44,12 +44,19 @@ app.post('/InserirLivros', upload.single("imagem"), async (req, res)=>{
     const { isbn, titulo, autor } = req.body
     const imagemUp = req.file ? "uploads/" + req.file.filename : null
 
-    await  pool.query(`
+   const result = await  pool.query(`
         INSERT INTO livros (isbn, caminho_capa, titulo_livro, autor_livro)
-        VALUES ($1, $2, $3, $4);
+        VALUES ($1, $2, $3, $4)
+        RETURNING id;
         `,[isbn, imagemUp, titulo, autor])
 
-          res.status(201).send("Livro inserido com sucesso.");
+        const idNovo = result.rows[0].id
+
+          res.status(201).json({
+            mensagem:"Livro inserido com sucesso.",
+            idCadastrado: idNovo
+        });
+
    }catch(err){
         console.error("Erro ao inserir livro:", err);
     res.status(500).send("Erro ao inserir livro.");
@@ -128,14 +135,14 @@ app.post("/verificarSeEmailJaExiste", async (req, res)=>{
 
 // Rotas para verificar se o livros ja está retirado/existe e se o usuario ja tem livros ritirados.
 app.post("/verificarLivroExiste", async (req, res)=>{
-    const {isbn} = req.body
+    const {id} = req.body
 
     try{
         const result = await pool.query(`
             SELECT 1 FROM livros
-            WHERE isbn = $1
+            WHERE id = $1
             LIMIT 1
-            `,[isbn])
+            `,[id])
             
             res.status(200).json(result.rows);
     }catch(err){
@@ -147,22 +154,24 @@ app.post("/verificarLivroExiste", async (req, res)=>{
 
 // Rota para fazer a retirada
 app.post("/fazerRetirada", async (req, res)=>{
-     const {isbn, cpf, dataDevolucao, observacoes} = req.body
+     const {id, cpf, dataDevolucao, observacoes} = req.body
     try{
          await pool.query(`
-            INSERT INTO retiradas_livros (isbn_livro, cpf_usuario, data_prevista_devolucao, observacoes)
-            VALUES($1, $2, $3, $4);
-            `,[isbn, cpf, dataDevolucao, observacoes])
+            INSERT INTO retiradas_livros (cpf_usuario, data_prevista_devolucao, observacoes)
+            VALUES($1, $2, $3);
+            `,[cpf, dataDevolucao, observacoes])
 
         await pool.query(`
             UPDATE livros
             SET status = 'pendente'
             WHERE isbn = $1;
-            `,[isbn])
-            res.status(200).send("Livro retirado")
+            `,[id])
+            res.status(200).json({
+                mensagem:"Livro retirado"})
     }catch(err){
         console.error(err)
-        res.status(400).send("Nao foi possivel fazer a retirada")
+        res.status(400).json({
+            mensagem:"Nao foi possivel fazer a retirada"})
     }
 })
 

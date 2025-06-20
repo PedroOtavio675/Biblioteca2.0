@@ -37,10 +37,14 @@ book.status == "pendente" && alert("O livro está emprestado")
         <p className="overflow-y-auto h-[210px]">{data.descricao}</p>
       </div>
       </div>
+      <div className="flex">
  <button onClick={statusDoLivro} className={book.status == "livre" ? "w-[80px] h-[50px] bg-green-900 text-center flex items-center justify-center rounded-md m-2" : "w-[80px] h-[50px] bg-amber-400 text-center flex items-center justify-center rounded-md m-2"}>
          {book.status == "livre" ? "Não reservado" : "Pendente"}
       </button>
+      <div className="m-2 bg-slate-500 rounded-md text-center">Retire o livro pelo ID:  <br /> {book.id}</div>
+      </div>
     </div>
+    
   );
 };
 export default DataLivro;

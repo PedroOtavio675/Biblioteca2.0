@@ -8,7 +8,7 @@ import dataValida from "../../validarData";
 
 const BoxRetirarLivro = ()=>{
 
-  const [form, setForm] = useState({isbn:"", cpf:"", dataDevolucao:"", observacoes:""})
+  const [form, setForm] = useState({id:"", cpf:"", dataDevolucao:"", observacoes:""})
   function parseDataBR(dataStr) {
   const [dia, mes, ano] = dataStr.split("/").map(Number);
   return new Date(ano, mes - 1, dia); // mês começa em 0 (janeiro)
@@ -16,19 +16,20 @@ const BoxRetirarLivro = ()=>{
     
 const retidaLivro = async (e)=>{
   e.preventDefault()
-  const resultISBN = await axios.post("http://localhost:3000/verificarLivroExiste", form)
-  const resultCPF = await axios.post("http://localhost:3000/verificarSeCPFJaExiste", form)
   
-  if(form.isbn !== "" && form.cpf !== "" && form.dataDevolucao !== ""){
-       if(resultISBN.data.length !== 0){
+  if(form.id !== "" && form.cpf !== "" && form.dataDevolucao !== ""){
+    const resultID = await axios.post("http://localhost:3000/verificarLivroExiste", form)
+  const resultCPF = await axios.post("http://localhost:3000/verificarSeCPFJaExiste", form)
+       if(resultID.data.length !== 0){
   if(validarCPF(form.cpf)){
     if(resultCPF.data.length !== 0){
 if(dataValida(form.dataDevolucao)){
   const dataHoje = new Date()
   const dataVerificada = parseDataBR(form.dataDevolucao)
   if(dataVerificada > dataHoje){
-axios.post("http://localhost:3000/fazerRetirada", form)
-  alert("ok")
+ const resultado = await axios.post("http://localhost:3000/fazerRetirada", form)
+ const result = await resultado.data
+ alert(result.mensagem)
   }else{
     alert("A data de devolução deve ser maior que a data atual!")
   }
@@ -58,15 +59,15 @@ axios.post("http://localhost:3000/fazerRetirada", form)
             type="text"
             id="standard-basic-isbn"
             variant="standard"
-            label="ISBN do livro"
-            value={form.isbn}
-            onChange={(e)=>{setForm({...form, isbn:e.target.value})}}
+            label="ID do livro"
+            value={form.id}
+            onChange={(e)=>{setForm({...form, id:e.target.value})}}
           ></TextField>
             <TextField
             type="text"
             id="standard-basic-cpf"
             variant="standard"
-            label={validarCPF(form.cpf) ? "CPF" : "CPF inválido"}
+            label={validarCPF(form.cpf) || form.cpf == "" ? "CPF do retirante" : "CPF inválido"}
              value={form.cpf}
             onChange={(e)=>{setForm({...form, cpf: e.target.value})}}
           ></TextField>
