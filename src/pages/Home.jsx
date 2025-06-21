@@ -3,40 +3,36 @@ import BoxHome from "../componentes/comp-Home/BoxHome";
 import RigthBar from "../componentes/comp-Home/RigthBar";
 import { useEffect, useState } from "react";
 import DataLivro from "../componentes/comp-Home/DataLivro";
+const apiURl = process.env.REACT_APP_API_URL;
 const Home = () => {
-  const [livros, setLivros] = useState([""])
+  const [livros, setLivros] = useState([""]);
   const [rightBar, setRightBar] = useState(false);
 
   function showBar() {
     setRightBar(true);
-    
   }
   function hideBar() {
     setRightBar(false);
-       console.log(rightBar);
+    console.log(rightBar);
   }
 
-  useEffect(()=>{
-    fetch("http://localhost:3000/livrosDoBanco")
-    .then((res) =>{
-      if(!res.ok) throw new Error("Erro ao Buscar!")
-        return res.json()
-    })
-    .then((data)=>setLivros(data))
-    
-    .catch((err)=>console.log(err)
-    )
-  },[])
+  useEffect(() => {
+    fetch(`${apiURl}/livrosDoBanco`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Erro ao Buscar!");
+        return res.json();
+      })
+      .then((data) => setLivros(data))
+
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div>
-      <HeaderBar rightBar={rightBar}  showBar={showBar}></HeaderBar>
-      <BoxHome   livros={livros}>
-  
-      </BoxHome>
+      <HeaderBar rightBar={rightBar} showBar={showBar}></HeaderBar>
+      <BoxHome livros={livros}></BoxHome>
       <DataLivro></DataLivro>
       <RigthBar rightBar={rightBar} hideBar={hideBar}></RigthBar>
-
     </div>
   );
 };

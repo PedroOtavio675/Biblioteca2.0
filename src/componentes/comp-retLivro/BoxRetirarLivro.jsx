@@ -5,7 +5,7 @@ import axios, { Axios } from "axios";
 import { useState } from "react";
 import validarCPF from "../../validarCPF";
 import dataValida from "../../validarData";
-
+const apiURl = import.meta.env.VITE_API_URL;
 const BoxRetirarLivro = ()=>{
 
   const [form, setForm] = useState({id:"", cpf:"", dataDevolucao:"", observacoes:""})
@@ -18,8 +18,8 @@ const retidaLivro = async (e)=>{
   e.preventDefault()
   
   if(form.id !== "" && form.cpf !== "" && form.dataDevolucao !== ""){
-    const resultID = await axios.post("http://localhost:3000/verificarLivroExiste", form)
-  const resultCPF = await axios.post("http://localhost:3000/verificarSeCPFJaExiste", form)
+    const resultID = await axios.post(`${apiURl}/verificarLivroExiste`, form)
+  const resultCPF = await axios.post(`${apiURl}/verificarSeCPFJaExiste`, form)
        if(resultID.data.length !== 0){
   if(validarCPF(form.cpf)){
     if(resultCPF.data.length !== 0){
@@ -27,7 +27,7 @@ if(dataValida(form.dataDevolucao)){
   const dataHoje = new Date()
   const dataVerificada = parseDataBR(form.dataDevolucao)
   if(dataVerificada > dataHoje){
- const resultado = await axios.post("http://localhost:3000/fazerRetirada", form)
+ const resultado = await axios.post(`${apiURl}/fazerRetirada`, form)
  const result = await resultado.data
  alert(result.mensagem)
   }else{

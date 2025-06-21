@@ -1,7 +1,7 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
-
+const apiURl = import.meta.env.VITE_API_URL;
 const DataLivro = ({ book, onClose, data }) => {
   if (!book) return null;
 
@@ -24,7 +24,7 @@ book.status == "pendente" && alert("O livro está emprestado")
             component="img"
             alt="img"
             height="140"
-            image={`http://localhost:3000/${book.caminho_capa}`}
+            image={`${apiURl}/${book.caminho_capa}`}
           />
         </Card>
         </div>

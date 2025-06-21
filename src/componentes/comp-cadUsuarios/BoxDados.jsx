@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import validarCPF from "../../validarCPF";
-
+const apiURl = import.meta.env.VITE_API_URL;
 const BoxDados = () => {
   const [form, setForm] = useState({ nome: "", email: "", senha: "", cpf: "" });
   const [checkSenha, setCheckSenha] = useState("");
@@ -13,11 +13,11 @@ const BoxDados = () => {
     e.preventDefault();
 
     const resultCPF = await axios.post(
-      "http://localhost:3000/verificarSeCPFJaExiste",
+      `${apiURl}/verificarSeCPFJaExiste`,
       form
     );
     const resultEMAIL = await axios.post(
-      "http://localhost:3000/verificarSeEmailJaExiste",
+      `${apiURl}/verificarSeEmailJaExiste`,
       form
     );
 
@@ -31,7 +31,7 @@ const BoxDados = () => {
             /[!@#$%^&*]/.test(form.senha)
           ) {
             try {
-              await axios.post("http://localhost:3000/registrarUsuario", form);
+              await axios.post(`${apiURl}/registrarUsuario`, form);
               alert(`Usuário ${form.nome} foi cadastrado`);
             } catch (err) {
               alert(err);
