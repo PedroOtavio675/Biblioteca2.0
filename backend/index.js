@@ -10,6 +10,11 @@ const PORT = 3000
 const cors = require('cors')
 app.use(cors())
 require("dotenv").config();
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.CLOUD_KEY_SECRET;
+
+// Tempo de expiração do token (ex: 1 hora)
+const expiresIn = '1h';
 
 app.use(express.json());
 

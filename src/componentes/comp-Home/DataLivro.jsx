@@ -1,7 +1,7 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
-const apiURl = import.meta.env.VITE_API_URL;
+// const apiURl = import.meta.env.VITE_API_URL;
 const DataLivro = ({ book, onClose, data }) => {
   if (!book) return null;
 
@@ -11,7 +11,7 @@ book.status == "pendente" && alert("O livro está emprestado")
   }
 
   return (
-    <div className="w-[500px] h-[500px] border-1 bg-slate-200 rounded-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col">
+    <div className="w-[90%] sm:w-[400px] md:w-[500px] border-1 bg-slate-200 rounded-md fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col">
       <ArrowBackIcon
         className="bg-slate-900 text-white rounded-md m-2"
         onClick={onClose}

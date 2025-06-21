@@ -44,14 +44,14 @@ function CadastroLivro() {
   };
 
   return (
-    <div className="w-[100vw] h-[100vh] bg-slate-600 flex items-center justify-center rounded-md">
-      <div className="bg-white text-[20px] flex items-center  flex-col rounded-md p-1">
-        <h2 className="p-2 ">Cadastra Livros</h2>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-           <div className="bg-slate-200 rounded-md m-2">
-          <div className="">
+    <div className="w-[100vw] h-screen overflow-x-hidden bg-slate-900 flex items-center justify-center rounded-md">
+      <div className="bg-white text-sm sm:text-base flex items-center justify-center w-[90%] md:w-[75%] lg:w-[50%]  flex-col rounded-md p-1">
+        <h2 className="p-2 ">Cadastrar Livro</h2>
+        <form className="flex flex-col items-center gap-y-4 w-full sm:w-[300px] md:w-[400px]" onSubmit={handleSubmit}>
+           <div className="rounded-md m-2 flex-wrap">
+        
             <TextField
-              className=""
+              className="w-full sm:w-[300px] md:w-[400px]"
               id="standard-basic"
               label="Digite a ISBN"
               variant="standard"
@@ -59,7 +59,7 @@ function CadastroLivro() {
               onChange={(e) => setCampoIsbn(e.target.value.trim())}
             />
             <TextField
-             className=""
+             className="w-full sm:w-[300px] md:w-[400px]"
               id="standard-basic"
               label="Nome do livro"
               variant="standard"
@@ -68,9 +68,9 @@ function CadastroLivro() {
             >
 
             </TextField>
-           </div>
+           
              <TextField
-             className="w-[394px]"
+             className="w-full sm:w-[300px] md:w-[400px]"
               id="standard-basic"
               label="Nome do autor"
               variant="standard"
@@ -82,13 +82,13 @@ function CadastroLivro() {
           </div>
 
           <InputImg imagem={imagem} setImagem={setImagem}></InputImg>
-          <div className="flex flex-col justify-end m-10">
-            <Button type="submit" variant="contained">
+          <div className="flex flex-col">
+            <Button type="submit" className="w-[200px]" variant="contained">
               Enviar
             </Button>
           </div>
         </form>
-        <div></div>
+      
       </div>
     </div>
   );

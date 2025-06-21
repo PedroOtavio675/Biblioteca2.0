@@ -52,7 +52,7 @@ if(dataValida(form.dataDevolucao)){
 }
 
     return(
-         <div className="w-[500px] h-[500px] bg-white rounded-md flex items-center justify-center flex-col">
+         <div className="w-[95%] sm:w-[300px] md:w-[400px] bg-white rounded-md flex items-center justify-center flex-col">
 <h2><strong>Retirar um Livro</strong></h2>
             <div className="flex flex-col">
           <TextField
@@ -84,7 +84,7 @@ if(dataValida(form.dataDevolucao)){
             value={form.observacoes}
             onChange={(e)=>{setForm({...form, observacoes: e.target.value})}}
            placeholder="Observações" name="" id="" className="w-[200px] h-[100px] border-1 rounded-md m-2"></textarea>
-            <button onClick={retidaLivro} className="bg-slate-900 text-white rounded-md p-2 mt-4">Retirar</button>
+            <button onClick={retidaLivro} className="bg-slate-900 text-white rounded-md p-2 m-4">Retirar</button>
         </div>
     )
 }

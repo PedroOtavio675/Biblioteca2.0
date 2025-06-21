@@ -11,7 +11,7 @@ const BoxDados = () => {
 
   const sendformUsuarios = async (e) => {
     e.preventDefault();
-
+ if(form.cpf !== "" && form.email !== "" && form.nome !== "" && form.senha !== "" && checkSenha !== ""){
     const resultCPF = await axios.post(
       `${apiURl}/verificarSeCPFJaExiste`,
       form
@@ -20,6 +20,7 @@ const BoxDados = () => {
       `${apiURl}/verificarSeEmailJaExiste`,
       form
     );
+   
 
     if (resultCPF.data.length === 0 && resultEMAIL.data.length === 0) {
       if (validarCPF(form.cpf) == true) {
@@ -48,12 +49,15 @@ const BoxDados = () => {
     } else {
       alert("Esse CPF ou email já está cadastrado em nosso banco!");
     }
+    }else{
+      alert("Complete todos os dados!")
+    }
   };
 
   return (
-    <div className="flex">
-      <div className="bg-slate-800 rounded-l-md w-[200px] h-[400px] flex items-center justify-center"></div>
-      <div className="bg-white rounded-r-md w-[400px] h-[400px] flex items-center justify-center flex-col">
+    <div className="flex w-[90%] sm:w-[500px] md:w-[600px]">
+      <div className="bg-slate-800 rounded-l-md w-[200px]  flex items-center justify-center"></div>
+      <div className="bg-white rounded-r-md w-[400px]  flex items-center justify-center flex-col">
         <h3 className="text-[20px]">Criar Conta</h3>
         <form onSubmit={sendformUsuarios} className="flex flex-col">
           <TextField
@@ -79,7 +83,7 @@ const BoxDados = () => {
             onChange={(e) => {
               setForm({ ...form, cpf: e.target.value });
             }}
-            label={validarCPF(form.cpf) || null ? "CPF" : "CPF inválido"}
+            label={validarCPF(form.cpf) || form.cpf == '' ? "CPF" : "CPF inválido"}
           ></TextField>
           <TextField
             value={form.senha}
