@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import InputImg from "../componentes/comp-cadLivro/InputImg";
-const apiURl = import.meta.env.VITE_API_URL;
+const apiURL = import.meta.env.VITE_API_URL;
 function CadastroLivro() {
   const [campoIsbn, setCampoIsbn] = useState("");
   const [imagem, setImagem] = useState(null);
@@ -17,7 +17,7 @@ function CadastroLivro() {
       formData.append("titulo", titulo)
       formData.append("autor", autor)
       try {
-        const resposta = await fetch(`${apiURl}/InserirLivros`, {
+        const resposta = await fetch(`${apiURL}/InserirLivros`, {
           method: "POST",
           body: formData,
         });
