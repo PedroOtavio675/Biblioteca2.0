@@ -9,6 +9,8 @@ function CadastroLivro() {
  const [autor, setautor] = useState("")
 
   const handleSubmit = async (e) => {
+    console.log(apiURL);
+    
      e.preventDefault();
     if (campoIsbn.trim() && imagem !== null && titulo !== "" && autor !== "") {
       const formData = new FormData();

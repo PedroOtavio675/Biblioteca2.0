@@ -3,7 +3,7 @@ import BoxHome from "../componentes/comp-Home/BoxHome";
 import RigthBar from "../componentes/comp-Home/RigthBar";
 import { useEffect, useState } from "react";
 import DataLivro from "../componentes/comp-Home/DataLivro";
-const apiURl = process.env.REACT_APP_API_URL;
+const apiURl = import.meta.env.VITE_API_URL;
 const Home = () => {
   const [livros, setLivros] = useState([""]);
   const [rightBar, setRightBar] = useState(false);
