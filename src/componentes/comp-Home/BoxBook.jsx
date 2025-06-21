@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import DataLivro from './DataLivro';
 import axios from "axios";
-const apiURl = import.meta.env.VITE_API_URL;
+// const apiURl = import.meta.env.VITE_API_URL;
 const BoxBook = (props) => {
     const [clickNoLivro, setClickNoLivro] = useState(null)
      const [dadosDOLivro, setDadosDOLivro] = useState({ descricao: "" });
@@ -50,7 +50,7 @@ if(result.data.totalItems == 0){
         component="img"
         alt="img"
         height="140"
-        image={`${apiURl}/${e.caminho_capa}`}
+        image={e.caminho_capa}
       />
       <CardContent>
         <Typography gutterBottom variant="h6" component="div">

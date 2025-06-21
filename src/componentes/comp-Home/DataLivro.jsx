@@ -24,7 +24,7 @@ book.status == "pendente" && alert("O livro está emprestado")
             component="img"
             alt="img"
             height="140"
-            image={`${apiURl}/${book.caminho_capa}`}
+            image={book.caminho_capa}
           />
         </Card>
         </div>
