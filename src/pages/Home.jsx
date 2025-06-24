@@ -28,9 +28,11 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <div >
+      <div className="flex items-center flex-col">
       <HeaderBar rightBar={rightBar} showBar={showBar}></HeaderBar>
       <BoxHome livros={livros}></BoxHome>
+      </div>
       <DataLivro></DataLivro>
       <RigthBar rightBar={rightBar} hideBar={hideBar}></RigthBar>
     </div>

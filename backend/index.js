@@ -93,15 +93,15 @@ app.get("/livrosDoBanco", async (req, res)=>{
 
 // Rota para registrar usuários
 app.post('/registrarUsuario', async (req, res)=>{
-    const {nome, email, senha, cpf} = req.body
+    const {nome, email, senha, cpf, tipoUsuario} = req.body
     
     const senhaHash = await bcrypt.hash(senha, 10)
 
     try{
         pool.query(`
-            INSERT INTO usuarios (nome_usuario, email_usuario, senha_hash_usuario, cpf_usuario)
-            VALUES($1, $2, $3, $4)
-            `,[nome, email, senhaHash, cpf])
+            INSERT INTO usuarios (nome_usuario, email_usuario, senha_hash_usuario, cpf_usuario, tipo_usuario)
+            VALUES($1, $2, $3, $4, $5)
+            `,[nome, email, senhaHash, cpf, tipoUsuario])
             res.status(201).send("Usuario cadastrado")
     }catch(err){
         console.error(err)

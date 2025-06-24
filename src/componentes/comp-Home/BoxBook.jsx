@@ -38,22 +38,21 @@ if(result.data.totalItems == 0){
   return (
 
       
-    <div  className="flex flex-wrap justify-center flex-row items-start gap-4">
+    <div  className="flex flex-wrap justify-center flex-row pt-[150px] items-start gap-4">
       {props.livros.map((e, index) => (
         <div key={index} onClick={()=>{
           setClickNoLivro(e)
           googleBooks(e.isbn, e.titulo_livro)
         }}>
-<Card   className='m-2' sx={{ maxWidth: 200, maxHeight: 340 }}>
+<Card   className='m-1' sx={{ maxWidth: 150, maxHeight: 340 }}>
       <CardMedia
-        className='h-[250px] w-[150px] p-2'
+        className='h-[258px] p-[3px]'
         component="img"
         alt="img"
-        height="140"
         image={e.caminho_capa}
       />
-      <CardContent>
-        <Typography gutterBottom variant="h6" component="div">
+      <CardContent className='p-0' sx={{padding: 1}}>
+        <Typography  gutterBottom variant="h10" component="div">
       
        {e.titulo_livro}
         </Typography>
