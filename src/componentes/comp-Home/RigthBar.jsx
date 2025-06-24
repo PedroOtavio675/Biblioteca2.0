@@ -4,7 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const RightBar = (props)=>{
    
     return(
-        <div className={props.rightBar ? "bg-slate-950 rounded-l-md absolute right-0 top-0 h-[100vh] w-[250px] z-50" : "hidden" }>
+        <div className={props.rightBar ? "bg-slate-950 fixed rounded-l-md right-0 top-0 h-[100vh] w-[250px] z-50" : "hidden" }>
         
         <ArrowBackIcon 
        onClick={props.hideBar}

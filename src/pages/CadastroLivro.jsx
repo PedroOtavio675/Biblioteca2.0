@@ -7,17 +7,19 @@ function CadastroLivro() {
   const [imagem, setImagem] = useState(null);
   const [titulo, settitulo] = useState("")
  const [autor, setautor] = useState("")
+ const [genero, setGenero] = useState("")
 
   const handleSubmit = async (e) => {
     console.log(apiURL);
     
      e.preventDefault();
-    if (campoIsbn.trim() && imagem !== null && titulo !== "" && autor !== "") {
+    if (campoIsbn.trim() && imagem !== null && titulo !== "" && autor !== "" && genero !== "") {
       const formData = new FormData();
       formData.append("isbn", campoIsbn);
       formData.append("imagem", imagem);
       formData.append("titulo", titulo)
       formData.append("autor", autor)
+      formData.append("genero", genero)
       try {
         const resposta = await fetch(`${apiURL}/InserirLivros`, {
           method: "POST",
@@ -66,9 +68,18 @@ function CadastroLivro() {
               value={titulo}
               onChange={(e)=> settitulo(e.target.value)}
             >
-
             </TextField>
-           
+            
+             <TextField
+             className="w-full sm:w-[300px] md:w-[400px]"
+              id="standard-basic"
+              label="Gênero"
+              variant="standard"
+              value={genero}
+              onChange={(e)=> setGenero(e.target.value)}
+            ></TextField>
+
+            
              <TextField
              className="w-full sm:w-[300px] md:w-[400px]"
               id="standard-basic"
@@ -77,6 +88,7 @@ function CadastroLivro() {
               value={autor}
               onChange={(e)=> setautor(e.target.value)}
             >
+            
 
             </TextField>
           </div>
