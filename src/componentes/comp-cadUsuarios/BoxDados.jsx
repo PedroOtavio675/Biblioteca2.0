@@ -2,25 +2,34 @@ import { TextField } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import validarCPF from "../../validarCPF";
-import LoginWindow from "./login";
+import LoginWindow from "./Login"
 const apiURl = import.meta.env.VITE_API_URL;
 const BoxDados = () => {
-  const [form, setForm] = useState({ nome: "", email: "", senha: "", cpf: "", tipoUsuario:"" });
+  const [form, setForm] = useState({
+    nome: "",
+    email: "",
+    senha: "",
+    cpf: "",
+    tipoUsuario: "",
+  });
   const [checkSenha, setCheckSenha] = useState("");
 
-   const [tamanhoTelas, setTamanhoTelas] = useState({telaLogin:100, telaCadastro: 400});
+  const [tamanhoTelas, setTamanhoTelas] = useState({
+    telaLogin: 100,
+    telaCadastro: 400,
+  });
 
   function animacaoMenu() {
-   setTamanhoTelas({telaLogin: 400, telaCadastro: 100})
+    setTamanhoTelas({ telaLogin: 400, telaCadastro: 100 });
   }
-  function animacaoMenu2(){
-    setTamanhoTelas({telaLogin: 100, telaCadastro: 400})
+  function animacaoMenu2() {
+    setTamanhoTelas({ telaLogin: 100, telaCadastro: 400 });
   }
 
-  function funcaoTipoUsuario(e){
-  setForm({...form, tipoUsuario:""})
- setForm({...form, tipoUsuario: e})
- console.log(form.tipoUsuario)
+  function funcaoTipoUsuario(e) {
+    setForm({ ...form, tipoUsuario: "" });
+    setForm({ ...form, tipoUsuario: e });
+    console.log(form.tipoUsuario);
   }
 
   const sendformUsuarios = async (e) => {
@@ -75,13 +84,32 @@ const BoxDados = () => {
 
   return (
     <div className="flex w-[90%] sm:w-[500px] md:w-[600px] h-[75%]">
-      <LoginWindow tamanhoTelas={tamanhoTelas} animacaoMenu={animacaoMenu}></LoginWindow>
-      <div className={`bg-white rounded-r-md transition-[width] duration-1000 ease-in-out flex items-center justify-center flex-col`}
-       style={{ width: `${tamanhoTelas.telaCadastro}px` }}>
-        <h3 className=" text-center sm:text-[15px] md:text-[24px] text-black flex-wrap">Criar Conta</h3>
-        <button onClick={animacaoMenu2} className={tamanhoTelas.telaLogin == 100 ? "hidden" : "w-[65px] bg-slate-800 text-white m-4 rounded-md"}>Cadastre-se</button>
-        
-        <form onSubmit={sendformUsuarios} className={tamanhoTelas.telaLogin == 100 ? "flex flex-col" : "hidden"}>
+      <LoginWindow
+        tamanhoTelas={tamanhoTelas}
+        animacaoMenu={animacaoMenu}
+      ></LoginWindow>
+      <div
+        className={`bg-white rounded-r-md transition-[width] duration-1000 ease-in-out flex items-center justify-center flex-col`}
+        style={{ width: `${tamanhoTelas.telaCadastro}px` }}
+      >
+        <h3 className=" text-center sm:text-[15px] md:text-[24px] text-black flex-wrap">
+          Criar Conta
+        </h3>
+        <button
+          onClick={animacaoMenu2}
+          className={
+            tamanhoTelas.telaLogin == 100
+              ? "hidden"
+              : "w-[65px] bg-slate-800 text-white m-4 rounded-md"
+          }
+        >
+          Cadastre-se
+        </button>
+
+        <form
+          onSubmit={sendformUsuarios}
+          className={tamanhoTelas.telaLogin == 100 ? "flex flex-col" : "hidden"}
+        >
           <TextField
             id="standard-basic-nome"
             label="Nome"
@@ -130,43 +158,52 @@ const BoxDados = () => {
             className="placeholder-red-500"
             variant="standard"
           ></TextField>
-         
+
           <div className="text-[12px] text-red-600">
             <p className={form.senha.length > 8 ? "hidden" : ""}>
               {form.senha.length < 8
                 ? "Deve conter pelo menos 8 caracteres"
                 : ""}
             </p>
-            <p className={/[A-Z]/.test(form.senha) && "hidden"}>
+            <p className={/[A-Z]/.test(form.senha) ? "hidden" : undefined}>
               {/[A-Z]/.test(form.senha) ? "" : "Letra maiúscula"}
             </p>
-            <p className={/\d/.test(form.senha) && "hidden"}>
+            <p className={/\d/.test(form.senha) ? "hidden" : undefined}>
               {/\d/.test(form.senha) ? "" : "Números"}
             </p>
-            <p className={/[!@#$%^&*]/.test(form.senha) && "hidden"}>
+            <p className={/[!@#$%^&*]/.test(form.senha) ? "hidden" : undefined}>
               {/[!@#$%^&*]/.test(form.senha) ? "" : "Caracteres especiais"}
             </p>
           </div>
-           <div name="tipoUsuario" className="flex flex-col">
+          <div name="tipoUsuario" className="flex flex-col">
             <label>
               Visitante
               <input
-              onClick={(e)=>funcaoTipoUsuario(e.target.value)}
-              type="radio" name="tipoUsuario" value="visitante" />
+                onClick={(e) => funcaoTipoUsuario(e.target.value)}
+                type="radio"
+                name="tipoUsuario"
+                value="visitante"
+              />
             </label>
 
             <label>
               Aluno
               <input
-               onClick={(e)=>funcaoTipoUsuario(e.target.value)}
-              type="radio" name="tipoUsuario" value="aluno" />
+                onClick={(e) => funcaoTipoUsuario(e.target.value)}
+                type="radio"
+                name="tipoUsuario"
+                value="aluno"
+              />
             </label>
 
             <label>
               Professor
-              <input 
-               onClick={(e)=>funcaoTipoUsuario(e.target.value)}
-              type="radio" name="tipoUsuario" value="professor" />
+              <input
+                onClick={(e) => funcaoTipoUsuario(e.target.value)}
+                type="radio"
+                name="tipoUsuario"
+                value="professor"
+              />
             </label>
           </div>
           <button
