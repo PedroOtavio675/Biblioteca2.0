@@ -22,8 +22,6 @@ console.log(result.data.totalItems);
 
 if(result.data.totalItems == 0){
   result = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=title:${titulo}`)
-   console.log("enrou no if");
-   console.log(result.data.items[0]);
 }
 
 
@@ -43,6 +41,8 @@ if(result.data.totalItems == 0){
         <div key={index} onClick={()=>{
           setClickNoLivro(e)
           googleBooks(e.isbn, e.titulo_livro)
+          console.log(e.genero_livro);
+          
         }}>
 <Card   className='m-1' sx={{ maxWidth: 150, maxHeight: 340 }}>
       <CardMedia

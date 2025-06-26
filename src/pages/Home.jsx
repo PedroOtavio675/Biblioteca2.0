@@ -7,6 +7,7 @@ const apiURl = import.meta.env.VITE_API_URL;
 const Home = () => {
   const [livros, setLivros] = useState([]);
   const [rightBar, setRightBar] = useState(false);
+  const [generoSelecionado, setGeneroSelecionado] = useState("")
   const [textoPesquisa, setTextoPesquisa] = useState("")
   const [livrosFiltrados, setLivrosFiltrados] = useState([])
 
@@ -25,7 +26,6 @@ const Home = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("li", data);
         
         setLivros(data)
         setLivrosFiltrados(data)
@@ -47,8 +47,6 @@ const Home = () => {
     return false
   } ))
  },[textoPesquisa])
-
- console.log(livrosFiltrados);
  
    
   return (
@@ -58,7 +56,7 @@ const Home = () => {
       <BoxHome livros={livrosFiltrados}></BoxHome>
       </div>
       <DataLivro></DataLivro>
-      <RigthBar rightBar={rightBar} hideBar={hideBar}></RigthBar>
+      <RigthBar generoSelecionado={generoSelecionado} setGeneroSelecionado={setGeneroSelecionado} rightBar={rightBar} hideBar={hideBar}></RigthBar>
     </div>
   );
 };

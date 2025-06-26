@@ -17,6 +17,7 @@ const RightBar = (props)=>{
                 value={props.generoSelecionado}
                 onChange={(e)=> {
                     props.setGeneroSelecionado(e.target.value)
+                    console.log(props.generoSelecionado);
                 }}
                 className='' name="" id="">
                      <option value="">todos</option>

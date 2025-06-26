@@ -15,15 +15,15 @@ const BoxDados = () => {
   const [checkSenha, setCheckSenha] = useState("");
 
   const [tamanhoTelas, setTamanhoTelas] = useState({
-    telaLogin: 100,
+    telaLogin: 200,
     telaCadastro: 400,
   });
 
   function animacaoMenu() {
-    setTamanhoTelas({ telaLogin: 400, telaCadastro: 100 });
+    setTamanhoTelas({ telaLogin: 400, telaCadastro: 200 });
   }
   function animacaoMenu2() {
-    setTamanhoTelas({ telaLogin: 100, telaCadastro: 400 });
+    setTamanhoTelas({ telaLogin: 200, telaCadastro: 400 });
   }
 
   function funcaoTipoUsuario(e) {
@@ -98,9 +98,9 @@ const BoxDados = () => {
         <button
           onClick={animacaoMenu2}
           className={
-            tamanhoTelas.telaLogin == 100
+            tamanhoTelas.telaLogin == 200
               ? "hidden"
-              : "w-[65px] bg-slate-800 text-white m-4 rounded-md"
+              : "md:w-[90px] h-[50px] bg-slate-800 text-white m-4 rounded-md"
           }
         >
           Cadastre-se
@@ -108,7 +108,7 @@ const BoxDados = () => {
 
         <form
           onSubmit={sendformUsuarios}
-          className={tamanhoTelas.telaLogin == 100 ? "flex flex-col" : "hidden"}
+          className={tamanhoTelas.telaLogin == 200 ? "flex flex-col" : "hidden"}
         >
           <TextField
             id="standard-basic-nome"
