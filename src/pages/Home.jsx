@@ -48,6 +48,7 @@ const Home = () => {
   } ))
  },[textoPesquisa])
  
+ 
    
   return (
     <div >

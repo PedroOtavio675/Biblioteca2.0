@@ -2,8 +2,11 @@
 import { TextField } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const apiURl = import.meta.env.VITE_API_URL;
 const LoginWindow = (props) => {
+  const navigate = useNavigate()
   const [formLogin, setFormLogin] = useState({
     emailLogin:"",
     senhaLogin:""
@@ -11,8 +14,17 @@ const LoginWindow = (props) => {
 
   const  enviarDadosLogin = async (event)=>{
     event.preventDefault()
-    const result = await axios.post(`${apiURl}/loginUsuario`, formLogin)
+
+    try{
+const result = await axios.post(`${apiURl}/loginUsuario`, formLogin)
     localStorage.setItem("login",JSON.stringify(result.data))
+    navigate("/")
+    }catch(err){
+      alert("Login inválido")
+      console.error(err);
+    }
+    
+
   }
   return (
     <div
